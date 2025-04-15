@@ -1,0 +1,220 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.game {
+  padding: .5rem 1.5rem;
+  background-color: var(--surface-light);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: solid 1px var(--cell-border-color);
+  border-radius: 1rem;
+}
+
+.board-container {
+  display: flex;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  --cell-size: 2rem;
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(var(--cell-size) * 0.75);
+  font-weight: 700;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: solid 1px var(--cell-border-color);
+  user-select: none;
+  cursor: default;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.cell.one {
+  color: var(--one);
+}
+
+.cell.two {
+  color: var(--two);
+}
+
+.cell.three {
+  color: var(--three);
+}
+
+.cell.four {
+  color: var(--four);
+}
+
+.cell.five {
+  color: var(--five);
+}
+
+.cell.six {
+  color: var(--six);
+}
+
+.cell.seven {
+  color: var(--seven);
+}
+
+.cell.eight {
+  color: var(--eight);
+}
+
+.cell.small {
+  --cell-size: 1.5rem;
+  font-size: calc(var(--cell-size) * 0.75);
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: var(--overlay-mid);
+  border-style: solid;
+  border-width: 2px;
+  border-top-color: var(--overlay-light);
+  border-left-color: var(--overlay-light);
+  border-right-color: var(--overlay-dark);
+  border-bottom-color: var(--overlay-dark);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+}
+
+.flag {
+  display: none;
+}
+
+.flag.active {
+  display: block;
+}
+
+.select-level {
+  display: flex;
+  list-style-type: none;
+  padding-left: 0;
+  gap: .5rem;
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.select-level li {
+  flex-grow: 1;
+}
+
+.select-level button {
+  width: 100%;
+  display: flex;
+  padding: .25rem 1rem;
+  justify-content: center;
+  border-radius: .25rem;
+  transition: background-color .15s;
+  text-transform: capitalize;
+}
+
+.select-level button.active {
+  background-color: var(--btn-active);
+}
+
+button {
+  background-color: var(--btn-color);
+  color: var(--surface);
+  border: none;
+  padding: .5rem 1rem;
+  margin: .5rem .5rem 0;
+  border-radius: .25rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color .15s;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.win {
+  color: var(--one);
+}
+
+.game-over {
+  color: var(--three);
+}
+
+.header-labels {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.footer-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.custom-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--surface-light);
+  border: solid 1px var(--cell-border-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 5rem 5rem;
+  margin: 10rem auto;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 2.5rem;
+}
+
+.modal-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.modal-label {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.modal-input {
+  width: 4rem;
+  height: 2rem;
+  text-align: center;
+  border-radius: .25rem;
+  border: solid 1px var(--cell-border-color);
+}
