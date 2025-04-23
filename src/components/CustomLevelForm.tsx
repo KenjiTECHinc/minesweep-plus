@@ -33,7 +33,7 @@ const CustomLevelForm: React.FC<CustomLevelFormProps> = ({ isOpen, onRequestClos
                                 type="number"
                                 value={rows}
                                 onChange={(e) => setRows(Number(e.target.value))}
-                                min={2}
+                                min={5}
                                 max={40}
                             />
                         </label>
@@ -44,7 +44,7 @@ const CustomLevelForm: React.FC<CustomLevelFormProps> = ({ isOpen, onRequestClos
                                 type="number"
                                 value={cols}
                                 onChange={(e) => setCols(Number(e.target.value))}
-                                min={2}
+                                min={5}
                                 max={40}
                             />
                         </label>
@@ -56,7 +56,7 @@ const CustomLevelForm: React.FC<CustomLevelFormProps> = ({ isOpen, onRequestClos
                                 value={mines}
                                 onChange={(e) => setMines(Number(e.target.value))}
                                 min={1}
-                                max={rows * cols - 1}
+                                max={(rows - 1) * (cols - 1)}
                             />
                         </label>
                     </div>

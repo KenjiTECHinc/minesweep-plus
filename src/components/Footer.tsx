@@ -9,7 +9,7 @@ const Footer = (props: FooterProps) => {
     return (
         <div className="footer-bar">
             <div className="footer-buttons">
-                {level === "custom" && <button onClick={openModal}>Edit Game</button>}
+                {level === "custom" && <button onClick={openModal}>Edit Board</button>}
                 <button className="footer-button" onClick={startNewGame}>New Game</button>
             </div>
         </div>

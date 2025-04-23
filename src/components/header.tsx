@@ -1,14 +1,16 @@
 import GameStatus from "./gameStatus";
+import TimerDisplay from "./timerDisplay";
 
 type headerProps = {
     isGameWin: boolean;
     isGameOver: boolean;
     isGameEnded: boolean;
     minesLeft: number;
+    timeDifference: string;
 }
 
 const header = (props: headerProps) => {
-    const { isGameWin, isGameOver, isGameEnded, minesLeft } = props;
+    const { isGameWin, isGameOver, isGameEnded, minesLeft, timeDifference } = props;
     return (
         <header>
             <div className="header-labels">
@@ -18,6 +20,9 @@ const header = (props: headerProps) => {
                     isGameEnded={isGameEnded}
                     minesLeft={minesLeft}
                 />
+            </div>
+            <div className="header-labels">
+                <TimerDisplay timeDifference={timeDifference} />
             </div>
         </header>
     )

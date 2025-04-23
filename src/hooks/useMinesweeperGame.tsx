@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { initBoard, initGame, revealAllMineCells, revealEmptyCells } from "../utils";
+import { initBoard, initGame, revealAllMineCells, revealEmptyCells, checkGameWin, getAdjacentCells, clearFlags } from "../utils";
 import { TBoard, TLevel } from "../types";
 import { DEFAULT_LEVEL, LEVELS } from "../constants";
+import useTimer from "./useTimer";
 
 const useMinesweeperGame = () => {
     const [level, setLevel] = useState(DEFAULT_LEVEL);
@@ -17,17 +18,22 @@ const useMinesweeperGame = () => {
     }, []);
 
     const [isFirstClick, setIsFirstClick] = useState(true);
-    const [gameBoard, setGameBoard] = useState(initGame(LEVELS[DEFAULT_LEVEL].rows, LEVELS[DEFAULT_LEVEL].cols, LEVELS[DEFAULT_LEVEL].mines));
+    const [gameBoard, setGameBoard] = useState(initGame(LEVELS[DEFAULT_LEVEL].rows, LEVELS[DEFAULT_LEVEL].cols));
     const [isGameOver, setIsGameOver] = useState(false);
     const [isGameWin, setIsGameWin] = useState(false);
+    const [totalFlags, setTotalFlags] = useState(0); // Track the number of flags placed
     const isGameEnded = isGameOver || isGameWin;
-    const minesLeft = currentLevel.mines;
+    const flagsLeft = currentLevel.mines - totalFlags; // Calculate flags left based on flags placed
+
+    const { timeDifference, startTimer, stopTimer, resetTimer, isTimerRunning } = useTimer();
 
     const resetBoard = useCallback(() => {
         setIsGameOver(false);
         setIsGameWin(false);
         setIsFirstClick(true);
-        setGameBoard(initGame(currentLevel.rows, currentLevel.cols, currentLevel.mines));
+        setTotalFlags(0);
+        resetTimer();
+        setGameBoard(initGame(currentLevel.rows, currentLevel.cols));
     }
         , [currentLevel]);
 
@@ -41,6 +47,12 @@ const useMinesweeperGame = () => {
     }
         , [currentLevel]);
 
+    useEffect(() => {
+        if (isGameEnded) {
+            console.log("game ended stopping timer");
+            stopTimer(); // Stop the timer when the game ends
+        }
+    }, [isGameEnded, stopTimer]);
 
     const openCell = (gameBoard: TBoard, row: number, col: number) => {
         const newGameBoard: TBoard = JSON.parse(JSON.stringify(gameBoard)); // Deep copy of the game board
@@ -48,6 +60,10 @@ const useMinesweeperGame = () => {
         const isMineCell = cell.value === "mine";
         const isNumberCell = typeof cell.value === "number" && cell.value > 0;
         const isEmptyCell = typeof cell.value === "number" && cell.value === 0;
+
+        if (!isTimerRunning) {
+            startTimer(); // Start the timer on the first click
+        }
 
         if (isMineCell) {
             setIsGameOver(true);
@@ -61,12 +77,16 @@ const useMinesweeperGame = () => {
             if (isEmptyCell) {
                 revealEmptyCells(newGameBoard, currentLevel.rows, currentLevel.cols, row, col);
             }
+            if (checkGameWin(newGameBoard, currentLevel.mines)) {
+                setIsGameWin(true);
+                console.log("You Win!");
+                revealAllMineCells(newGameBoard);
+            }
         }
         return newGameBoard;
     }
 
     const handleCellClick = (row: number, col: number) => {
-        // Handle cell click logic here
         if (isGameEnded ||
             gameBoard[row][col].isOpened ||
             gameBoard[row][col].isFlagged
@@ -74,20 +94,22 @@ const useMinesweeperGame = () => {
             return null;
         }
 
-        const mineCell = gameBoard[row][col].value === "mine";
-        const firstClickIsMine = isFirstClick && mineCell;
-
         let newGameBoard: TBoard;
 
-        if (firstClickIsMine) {
-            do {
-                newGameBoard = initBoard(currentLevel.rows, currentLevel.cols, currentLevel.mines);
-            } while (newGameBoard[row][col].value === "mine");
+        if (isFirstClick) {
+            const reservedPositions = getAdjacentCells(row, col, currentLevel.rows, currentLevel.cols);
+            reservedPositions.push({ row, col });
+
+            newGameBoard = clearFlags(gameBoard); // Clear flags on the new game board
+
+            // Initialize the board with mines placed excluding reserved positions
+            newGameBoard = initBoard(newGameBoard, currentLevel.rows, currentLevel.cols, currentLevel.mines, reservedPositions);
+            setTotalFlags(0);
+            setIsFirstClick(false);
         } else {
             newGameBoard = JSON.parse(JSON.stringify(gameBoard)); // Deep copy of the game board
         }
 
-        setIsFirstClick(false); // first click is false after game is played.
         const openCellGameBoard = openCell(newGameBoard, row, col);
 
         if (openCellGameBoard) {
@@ -101,21 +123,33 @@ const useMinesweeperGame = () => {
     const handleCellRightClick = (e: React.MouseEvent<HTMLDivElement>, row: number, col: number) => {
         e.preventDefault(); // Prevent the default context menu from appearing
 
-        if (gameBoard[row][col].isOpened) return; // Prevent flagging opened cells
+        if (isGameEnded || gameBoard[row][col].isOpened) return; // Prevent flagging opened cells
+        if (!gameBoard[row][col].isFlagged && flagsLeft === 0) return; // Prevent flagging if no flags left
+
+        let flagDifference = 0;
 
         setGameBoard((prevBoard) => {
             const newBoard: TBoard = JSON.parse(JSON.stringify(prevBoard)); // Deep copy of the game board
-            const cell = newBoard[row][col];
+            const cell = prevBoard[row][col];
 
             if (cell.isFlagged) {
-                cell.isFlagged = false;
+                newBoard[row][col].isFlagged = false;
+                if (!flagDifference) flagDifference--;
             } else {
-                cell.isFlagged = true;
+                newBoard[row][col].isFlagged = true;
+                if (!flagDifference) flagDifference++;
+            }
+
+            if (checkGameWin(newBoard, currentLevel.mines)) {
+                setIsGameWin(true);
+                console.log("You Win!");
+                revealAllMineCells(newBoard);
             }
 
             return newBoard;
         });
 
+        setTotalFlags((prevFlags) => prevFlags + flagDifference);
     };
 
 
@@ -128,8 +162,9 @@ const useMinesweeperGame = () => {
         isGameOver,
         isGameWin,
         isGameEnded,
-        minesLeft,
+        flagsLeft,
         startNewGame,
+        timeDifference,
     };
 };
 

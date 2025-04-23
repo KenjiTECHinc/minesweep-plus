@@ -18,17 +18,36 @@ const createBoard = (rows: number, cols: number) => {
     return board;
 };
 
-const fillMines = (emptyBoard: TBoard, rows: number, cols: number, totalMines: number) => {
-    let mines = 0;
-    while (mines < totalMines) {
-        const row = Math.floor(Math.random() * rows);
-        const col = Math.floor(Math.random() * cols);
+const shuffleArray = (array: Array<{ row: number, col: number }>) => {
+    const arr = array.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
 
-        if (emptyBoard[row][col].value !== 'mine') {
-            emptyBoard[row][col] = { value: 'mine', isOpened: false, isFlagged: false };
-            mines++;
+const fillMines = (emptyBoard: TBoard, rows: number, cols: number, totalMines: number, reservedPositions: Array<{ row: number, col: number }>) => {
+    /**
+     * @description: Fill the board with mines randomly using a shuffled array.
+
+     */
+    const allPositions = [];
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (!reservedPositions.some(pos => pos.row === i && pos.col === j)) {
+                allPositions.push({ row: i, col: j });
+            }
         }
     }
+
+    let shuffledPositions = shuffleArray(allPositions);
+
+    for (let i = 0; i < totalMines; i++) {
+        const { row, col } = shuffledPositions[i];
+        emptyBoard[row][col].value = 'mine';
+    }
+
     return emptyBoard;
 }
 
@@ -56,16 +75,21 @@ const fillNumbers = (mineBoard: TBoard, rows: number, cols: number) => {
     return mineBoard;
 }
 
-export const initBoard = (rows: number, cols: number, totalMines: number) => {
-    const emptyBoard = createBoard(rows, cols);
-    const mineBoard = fillMines(emptyBoard, rows, cols, totalMines);
+export const initBoard = (gameBoard: TBoard, rows: number, cols: number, totalMines: number, reservedPositions: Array<{ row: number, col: number }>) => {
+    /**
+     * @description: Initialize the game board with mines and numbers.
+     */
+    const mineBoard = fillMines(gameBoard, rows, cols, totalMines, reservedPositions);
     const mineBoardWithNumbers = fillNumbers(mineBoard, rows, cols);
 
     return mineBoardWithNumbers;
 }
 
-export const initGame = (rows: number, cols: number, totalMines: number) => {
-    return initBoard(rows, cols, totalMines);
+export const initGame = (rows: number, cols: number) => {
+    /**
+     * @description: Initialize an empty game board with the given number of rows and columns.
+     */
+    return createBoard(rows, cols);
 }
 
 export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row: number, col: number) => {
@@ -103,4 +127,62 @@ export const revealAllMineCells = (board: TBoard) => {
             }
         })
     })
+}
+
+export const checkGameWin = (board: TBoard, totalMines: number) => {
+    let unopenedCells = 0;
+    let correctFlags = 0;
+
+    board.forEach(row => {
+        row.forEach(cell => {
+            if (!cell.isOpened) unopenedCells++;
+            if (cell.isFlagged && cell.value === 'mine') correctFlags++;
+        })
+    })
+
+    return unopenedCells === totalMines || correctFlags === totalMines;
+}
+
+export const getTimeDifference = (timeStart: Date | null, timeNow: Date | null) => {
+    /**
+     * @description: Get the time difference between two Date objects in MM:SS format.
+     */
+    if (timeStart === null || timeNow === null) return "00:00";
+
+    return new Intl.DateTimeFormat('en-US', {
+        minute: '2-digit',
+        second: '2-digit'
+    }).format(timeNow.getTime() - timeStart.getTime());
+}
+
+export const getAdjacentCells = (row: number, col: number, rows: number, cols: number) => {
+    /**
+     * @description: Get the adjacent cells of a cell in a 2D grid.
+     */
+    const positions: { row: number; col: number }[] = [];
+
+    for (let i = row - 1; i <= row + 1; i++) {
+        for (let j = col - 1; j <= col + 1; j++) {
+            if (i >= 0 && i < rows && j >= 0 && j < cols) {
+                positions.push({ row: i, col: j });
+            }
+        }
+    }
+
+    return positions;
+}
+
+export const clearFlags = (board: TBoard) => {
+    /**
+     * @description: Clear all flags on the board.
+     */
+    board.forEach(row => {
+        row.forEach(cell => {
+            if (cell.isFlagged) {
+                cell.isFlagged = false;
+            }
+        })
+    })
+
+    return board;
 }

@@ -16,8 +16,9 @@ function App() {
     isGameOver,
     isGameWin,
     isGameEnded,
-    minesLeft,
+    flagsLeft,
     startNewGame,
+    timeDifference,
   } = useMinesweeperGame()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,7 +37,8 @@ function App() {
         isGameWin={isGameWin}
         isGameOver={isGameOver}
         isGameEnded={isGameEnded}
-        minesLeft={minesLeft}
+        minesLeft={flagsLeft}
+        timeDifference={timeDifference}
       />
       <div className="board-container">
         <Game_board gameBoard={gameBoard} level={level} handleCellClick={handleCellClick} handleCellRightClick={handleCellRightClick} />

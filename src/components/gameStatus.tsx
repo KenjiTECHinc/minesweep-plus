@@ -11,7 +11,9 @@ const GameStatus = (props: GameStatusProps) => {
         <>
             {isGameWin && <div className="game-status">You Win! 🎉</div>}
             {isGameOver && <div className="game-status">Game Over! 💥</div>}
-            {!isGameEnded && (<>🚩{minesLeft}</>)}
+            {!isGameEnded && (
+                <>🚩{minesLeft}</>
+            )}
         </>
     );
 };
