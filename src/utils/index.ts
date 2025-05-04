@@ -109,7 +109,7 @@ export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row:
                     const newCol = currentCol + j;
                     if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
                         const neighborCell = board[newRow][newCol];
-                        if (!neighborCell.isOpened && neighborCell.value !== 'mine') {
+                        if (!neighborCell.isOpened && neighborCell.value !== 'mine' && !neighborCell.isFlagged) {
                             queue.push([newRow, newCol]);
                         }
                     }
