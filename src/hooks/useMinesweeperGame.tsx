@@ -55,6 +55,13 @@ const useMinesweeperGame = () => {
     }, [isGameEnded, stopTimer]);
 
     const openCell = (gameBoard: TBoard, row: number, col: number) => {
+        /**
+         * * @description: Open a cell and reveal its value. If the cell is empty (0), reveal adjacent cells recursively.
+         * * @param {TBoard} gameBoard - The current game board.
+         * * @param {number} row - The row index of the cell to open.
+         * * @param {number} col - The column index of the cell to open.
+         * * @returns {TBoard | null} - The updated game board or null if the game is over.
+         */
         const newGameBoard: TBoard = JSON.parse(JSON.stringify(gameBoard)); // Deep copy of the game board
         const cell = newGameBoard[row][col];
         const isMineCell = cell.value === "mine";
@@ -87,6 +94,12 @@ const useMinesweeperGame = () => {
     }
 
     const handleCellClick = (row: number, col: number) => {
+        /**
+         * * @description: Handle cell click event. If it's the first click, initialize the board and place mines. Otherwise, open the clicked cell.
+         * * @param {number} row - The row index of the clicked cell.
+         * * @param {number} col - The column index of the clicked cell.
+         * * @returns {void}
+         */
         if (isGameEnded ||
             gameBoard[row][col].isOpened ||
             gameBoard[row][col].isFlagged
@@ -121,6 +134,13 @@ const useMinesweeperGame = () => {
     };
 
     const handleCellRightClick = (e: React.MouseEvent<HTMLDivElement>, row: number, col: number) => {
+        /**
+         * * @description: Handle right-click event to flag or unflag a cell. Prevent default context menu from appearing.
+         * * @param {React.MouseEvent<HTMLDivElement>} e - The right-click event.
+         * * @param {number} row - The row index of the clicked cell.
+         * * @param {number} col - The column index of the clicked cell.
+         * * @returns {void}
+         */
         e.preventDefault(); // Prevent the default context menu from appearing
 
         if (isGameEnded || gameBoard[row][col].isOpened) return; // Prevent flagging opened cells

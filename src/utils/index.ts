@@ -19,6 +19,9 @@ const createBoard = (rows: number, cols: number) => {
 };
 
 const shuffleArray = (array: Array<{ row: number, col: number }>) => {
+    /**
+     * @description: Shuffle an array.
+     */
     const arr = array.slice();
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -93,6 +96,15 @@ export const initGame = (rows: number, cols: number) => {
 }
 
 export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row: number, col: number) => {
+    /**
+     * @description: Reveal all empty cells (0) and their adjacent cells recursively.
+     * @param {TBoard} board - The game board.
+     * @param {number} rows - The number of rows in the board.
+     * @param {number} cols - The number of columns in the board.
+     * @param {number} row - The row index of the cell to reveal.
+     * @param {number} col - The column index of the cell to reveal.
+     * @returns {void}
+     */
     const queue: [number, number][] = [[row, col]];
 
     while (queue.length > 0) {

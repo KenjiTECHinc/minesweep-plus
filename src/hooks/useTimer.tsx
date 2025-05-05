@@ -26,6 +26,9 @@ const useTimer = () => {
     }, [])
 
     useEffect(() => {
+        /**
+         * @description: Sets up an interval to update the current time every second.
+         */
         if (!timeStarted) return;
 
         timerInterval.current = setInterval(() => {
