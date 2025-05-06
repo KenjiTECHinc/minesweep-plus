@@ -110,14 +110,13 @@ export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row:
     const queue: [number, number][] = [[row, col]];
     board[row][col].isOpened = true; // Mark the initial cell as opened
 
-    // console.log("queue: ", queue);
     while (queue.length > 0) {
         const next = queue.shift();
         if (!next) continue;
         const [currentRow, currentCol] = next;
         const cell = board[currentRow][currentCol];
 
-        // cell.isOpened = true;
+        cell.isOpened = true;
         if (cell.value === 0) {
             for (let i = -1; i <= 1; i++) {
                 for (let j = -1; j <= 1; j++) {
@@ -125,9 +124,9 @@ export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row:
                     const newCol = currentCol + j;
                     if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
                         const neighborCell = board[newRow][newCol];
-                        // console.log("neighbor cell: ", neighborCell);
+                        console.log("neighbor cell: ", neighborCell);
                         if (!neighborCell.isOpened && neighborCell.value !== 'mine' && !neighborCell.isFlagged) {
-                            neighborCell.isOpened = true;
+                            neighborCell.isOpened = true; // Mark the neighbor cell as opened
                             queue.push([newRow, newCol]);
                         }
                     }

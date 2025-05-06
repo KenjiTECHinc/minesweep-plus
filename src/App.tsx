@@ -9,7 +9,7 @@ import CustomLevelForm from './components/CustomLevelForm'
 
 function App() {
 
-  const isDebug = true; //change here to toggle between debug and normal mode
+  const isDebug = false; //change here to toggle between debug and normal mode
 
   const { level,
     changeLevel,

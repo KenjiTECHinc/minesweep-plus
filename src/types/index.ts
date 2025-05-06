@@ -17,8 +17,8 @@ type numberCell = {
 }
 type emptyCell = {
     value: null;
-    isOpened: false;
-    isFlagged: false;
+    isOpened: boolean;
+    isFlagged: boolean;
 }
 
 export type openedMineCell = openedCell & mineCell;
