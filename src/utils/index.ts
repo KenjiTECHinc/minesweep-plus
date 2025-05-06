@@ -27,6 +27,7 @@ const shuffleArray = (array: Array<{ row: number, col: number }>) => {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+    // console.log("shuffled positions: ", arr);
     return arr;
 }
 
@@ -36,6 +37,7 @@ const fillMines = (emptyBoard: TBoard, rows: number, cols: number, totalMines: n
 
      */
     const allPositions = [];
+    // console.log("filling mines: ", reservedPositions);
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             if (!reservedPositions.some(pos => pos.row === i && pos.col === j)) {
@@ -84,7 +86,7 @@ export const initBoard = (gameBoard: TBoard, rows: number, cols: number, totalMi
      */
     const mineBoard = fillMines(gameBoard, rows, cols, totalMines, reservedPositions);
     const mineBoardWithNumbers = fillNumbers(mineBoard, rows, cols);
-
+    // console.log("mine board with numbers: ", mineBoardWithNumbers);
     return mineBoardWithNumbers;
 }
 
@@ -106,14 +108,16 @@ export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row:
      * @returns {void}
      */
     const queue: [number, number][] = [[row, col]];
+    board[row][col].isOpened = true; // Mark the initial cell as opened
 
+    // console.log("queue: ", queue);
     while (queue.length > 0) {
         const next = queue.shift();
         if (!next) continue;
         const [currentRow, currentCol] = next;
         const cell = board[currentRow][currentCol];
 
-        cell.isOpened = true;
+        // cell.isOpened = true;
         if (cell.value === 0) {
             for (let i = -1; i <= 1; i++) {
                 for (let j = -1; j <= 1; j++) {
@@ -121,7 +125,9 @@ export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row:
                     const newCol = currentCol + j;
                     if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
                         const neighborCell = board[newRow][newCol];
+                        // console.log("neighbor cell: ", neighborCell);
                         if (!neighborCell.isOpened && neighborCell.value !== 'mine' && !neighborCell.isFlagged) {
+                            neighborCell.isOpened = true;
                             queue.push([newRow, newCol]);
                         }
                     }
@@ -129,6 +135,7 @@ export const revealEmptyCells = (board: TBoard, rows: number, cols: number, row:
             }
         }
     }
+    // console.log("revealed empty cells: ", board);
 }
 
 export const revealAllMineCells = (board: TBoard) => {
@@ -172,6 +179,8 @@ export const getAdjacentCells = (row: number, col: number, rows: number, cols: n
      * @description: Get the adjacent cells of a cell in a 2D grid.
      */
     const positions: { row: number; col: number }[] = [];
+
+    // console.log("get Adjacent cells");
 
     for (let i = row - 1; i <= row + 1; i++) {
         for (let j = col - 1; j <= col + 1; j++) {

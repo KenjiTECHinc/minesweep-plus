@@ -2,6 +2,7 @@ import { TBoard, TLevel } from '../types';
 import Cell from './cell';
 
 type Props = {
+    isDebug: boolean;
     gameBoard: TBoard;
     level: TLevel;
     handleCellClick: (row: number, col: number) => void;
@@ -9,7 +10,7 @@ type Props = {
 }
 
 const Game_board = (props: Props) => {
-    const { gameBoard, level, handleCellClick, handleCellRightClick } = props;
+    const { isDebug, gameBoard, level, handleCellClick, handleCellRightClick } = props;
 
     return (
         <div className="game_board">
@@ -17,6 +18,7 @@ const Game_board = (props: Props) => {
                 <div className="row">
                     {row.map((cell, cellIndex) => (
                         <Cell
+                            isDebug={isDebug}
                             cell={cell}
                             level={level}
                             rowIndex={rowIndex}

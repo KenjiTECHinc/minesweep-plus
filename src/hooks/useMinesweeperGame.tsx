@@ -82,6 +82,7 @@ const useMinesweeperGame = () => {
             cell.isOpened = true;
             if (isNumberCell) { }
             if (isEmptyCell) {
+                console.log("Empty cell clicked");
                 revealEmptyCells(newGameBoard, currentLevel.rows, currentLevel.cols, row, col);
             }
             if (checkGameWin(newGameBoard, currentLevel.mines)) {
@@ -110,7 +111,7 @@ const useMinesweeperGame = () => {
         let newGameBoard: TBoard;
 
         if (isFirstClick) {
-            const reservedPositions = getAdjacentCells(row, col, currentLevel.rows, currentLevel.cols);
+            var reservedPositions = getAdjacentCells(row, col, currentLevel.rows, currentLevel.cols);
             reservedPositions.push({ row, col });
 
             newGameBoard = clearFlags(gameBoard); // Clear flags on the new game board
@@ -122,6 +123,8 @@ const useMinesweeperGame = () => {
         } else {
             newGameBoard = JSON.parse(JSON.stringify(gameBoard)); // Deep copy of the game board
         }
+
+        // console.log("Game board: ", newGameBoard);
 
         const openCellGameBoard = openCell(newGameBoard, row, col);
 

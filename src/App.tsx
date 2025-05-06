@@ -8,6 +8,9 @@ import Footer from './components/Footer'
 import CustomLevelForm from './components/CustomLevelForm'
 
 function App() {
+
+  const isDebug = true; //change here to toggle between debug and normal mode
+
   const { level,
     changeLevel,
     gameBoard,
@@ -41,7 +44,7 @@ function App() {
         timeDifference={timeDifference}
       />
       <div className="board-container">
-        <Game_board gameBoard={gameBoard} level={level} handleCellClick={handleCellClick} handleCellRightClick={handleCellRightClick} />
+        <Game_board isDebug={isDebug} gameBoard={gameBoard} level={level} handleCellClick={handleCellClick} handleCellRightClick={handleCellRightClick} />
       </div>
       <SelectLevel level={level} changeLevel={changeLevel} />
       <CustomLevelForm

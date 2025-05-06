@@ -3,6 +3,7 @@ import { CELL_NUMBERS_COLORS } from '../constants';
 import { gameCell, TLevel } from '../types';
 
 type CellProps = {
+    isDebug: boolean;
     cell: gameCell;
     level: TLevel;
     rowIndex: number;
@@ -11,7 +12,7 @@ type CellProps = {
     handleCellRightClick: (e: React.MouseEvent<HTMLDivElement>, row: number, col: number) => void;
 }
 
-const Cell = ({ cell, level, rowIndex, colIndex, handleCellClick, handleCellRightClick }: CellProps) => {
+const Cell = ({ isDebug, cell, level, rowIndex, colIndex, handleCellClick, handleCellRightClick }: CellProps) => {
     return (
         <div className={clsx(
             "cell",
@@ -23,7 +24,7 @@ const Cell = ({ cell, level, rowIndex, colIndex, handleCellClick, handleCellRigh
             {(typeof cell.value === "number" && cell.value) ? cell.value : ""}
             {cell.value === "mine" && <span className="mine">💣</span>}
             {!cell.isOpened &&
-                <div className="overlay">
+                <div className={isDebug ? "overlay-debug" : "overlay"}>
                     <span className={clsx("flag", cell.isFlagged && "active")}>🚩</span>
                 </div>
             }
