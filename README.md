@@ -1,9 +1,9 @@
 # **Minesweep Plus**: a minesweeper mini-game 💣
 
-## Tech Stack
+## Technologies Used
 [![Tech stack](https://skillicons.dev/icons?i=vite,react,ts,css)](https://skillicons.dev)
 
-## Running the Project
+## Deployment
 
 First, clone or download the repository from GitHub.
 
@@ -17,7 +17,8 @@ npm install
 npm run dev
 ```
 
-## Features
+## Project Overview
+### Features
 - First click safety
 - Game win/over logic
 - Flags logic
@@ -31,7 +32,6 @@ To customize your own board, follow these steps:
 2. Select "Edit Board".
 3. Modify your custom settings.
 
-## Project Overview
 ![default](public/default-game.png)
 
 ![custom](public/custom-game.png)
